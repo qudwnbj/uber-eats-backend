@@ -8,5 +8,5 @@ export class EditRestaurantInput extends PartialType(CreateRestaurantInput) {
   restaurantId: number;
 }
 
-ObjectType();
+@ObjectType()
 export class EditRestaurantOutput extends CoreOutput {}

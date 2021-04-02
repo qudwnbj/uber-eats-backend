@@ -7,5 +7,5 @@ export class DeleteRestaurantInput {
   restaurantId: number;
 }
 
-ObjectType();
+@ObjectType()
 export class DeleteRestaurantOutput extends CoreOutput {}
