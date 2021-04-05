@@ -63,8 +63,14 @@ import { OrderItem } from './orders/entities/order-item.entity';
       ],
     }),
     GraphQLModule.forRoot({
+      installSubscriptionHandlers: true,
       autoSchemaFile: true,
-      context: ({ req }) => ({ user: req['user'] }),
+      context: ({ req, connection }) => {
+        const TOKEN_KEY = 'x-jwt';
+        return {
+          token: req ? req.headers[TOKEN_KEY] : connection.context[TOKEN_KEY],
+        };
+      },
     }),
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY,
@@ -82,9 +88,14 @@ import { OrderItem } from './orders/entities/order-item.entity';
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule {
+export class AppModule {}
+/* 
+ HTTP 만 가능.
+ 웹소켓에서 불가능
+ 
+ implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    /* 
+    
     특정 경로 및 특정 방법
    
     consumer.apply(JwtMiddleware).forRoutes({
@@ -108,10 +119,11 @@ export class AppModule implements NestModule {
       method: RequestMethod.ALL,
     });
 
-    */
+    
     consumer.apply(JwtMiddleware).forRoutes({
       path: '/graphql',
       method: RequestMethod.POST,
     });
   }
 }
+*/
